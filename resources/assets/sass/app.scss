@@ -12,3 +12,28 @@
   background-color: #fff;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
 }
+
+.productListItem {
+  img {
+    max-height: 180px;
+    max-width: 127px;
+    margin-right: 1rem;
+  }
+  padding: 15px;
+  .itemPrice {
+    span {
+      font-weight: bold;
+    }
+    font-size: 1.4rem;
+  }
+  .oldPrice {
+    span {
+      font-weight: bold;
+    }
+    text-decoration: line-through;
+    margin-bottom: 0;
+  }
+  .input-group {
+    max-width: 100px;
+  }
+}

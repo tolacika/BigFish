@@ -10000,3 +10000,34 @@ a.text-dark:focus {
           box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
 }
 
+.productListItem {
+  padding: 15px;
+}
+
+.productListItem img {
+  max-height: 180px;
+  max-width: 127px;
+  margin-right: 1rem;
+}
+
+.productListItem .itemPrice {
+  font-size: 1.4rem;
+}
+
+.productListItem .itemPrice span {
+  font-weight: bold;
+}
+
+.productListItem .oldPrice {
+  text-decoration: line-through;
+  margin-bottom: 0;
+}
+
+.productListItem .oldPrice span {
+  font-weight: bold;
+}
+
+.productListItem .input-group {
+  max-width: 100px;
+}
+

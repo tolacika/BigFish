@@ -39,4 +39,77 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  */
 class Product extends Model {
     use SoftDeletes;
+
+    public function hasPriceDiscount() {
+        if (Discount::active()->where('target_type', 'single')->where('target_reference', $this->sku)->whereIn('discount_type', ['percent', 'fix'])->count() > 0) {
+            return true;
+        }
+        if (Discount::active()->where('target_type', 'publisher')->where('target_reference', $this->publisher)->whereIn('discount_type', ['percent', 'fix'])->count() > 0) {
+            return true;
+        }
+
+        return false;
+    }
+
+    public function hasOtherDiscount() {
+        if (Discount::active()->where('target_type', 'single')->where('target_reference', $this->sku)->whereNotIn('discount_type', ['percent', 'fix'])->count() > 0) {
+            return true;
+        }
+        if (Discount::active()->where('target_type', 'publisher')->where('target_reference', $this->publisher)->whereNotIn('discount_type', ['percent', 'fix'])->count() > 0) {
+            return true;
+        }
+
+        return false;
+    }
+
+    public function getOtherDiscount() {
+        $disc = Discount::active()->where('target_type', 'single')->where('target_reference', $this->sku)->whereNotIn('discount_type', ['percent', 'fix'])->first();
+        if ($disc) {
+            return $disc->getText();
+        }
+        $disc = Discount::active()->where('target_type', 'publisher')->where('target_reference', $this->publisher)->whereNotIn('discount_type', ['percent', 'fix'])->first();
+        if ($disc) {
+            return $disc->getText();
+        }
+        return "";
+    }
+
+    private function formatPrice($price, $format = false) {
+        if ($format) {
+            return number_format($price, 0, '', ' ');
+        }
+
+        return $price;
+    }
+
+    public function getOldPrice($format = false) {
+        return $this->formatPrice($this->price, $format);
+    }
+
+    public function getPrice($format = false) {
+        return $this->formatPrice($this->price, $format);
+    }
+
+    /**
+     * @param bool $format
+     *
+     * @return string
+     */
+    public function getDiscountPrice($format = false) {
+        if (!$this->hasPriceDiscount()) {
+            return $this->getOldPrice($format);
+        }
+
+        $singleTarget = Discount::active()->where('target_type', 'single')->where('target_reference', $this->sku)->whereIn('discount_type', ['percent', 'fix'])->first();
+        if ($singleTarget) {
+            return $this->formatPrice($singleTarget->getNewPrice($this->price), $format);
+        }
+
+        $publisherTarget = Discount::active()->where('target_type', 'publisher')->where('target_reference', $this->publisher)->whereIn('discount_type', ['percent', 'fix'])->first();
+        if ($publisherTarget) {
+            return $this->formatPrice($publisherTarget->getNewPrice($this->price), $format);
+        }
+
+        return $this->getOldPrice($format);
+    }
 }

@@ -2,10 +2,19 @@ Application = function () {
 };
 
 Application.prototype.initApp = function () {
-    /*NProgress.configure({
-        showSpinner: false,
-        template: '<div class="bar nprogress-bar-header nprogress-bar-danger" role="bar"></div><div class="spinner" role="spinner"><div class="spinner-icon"></div></div>'
-    });*/
+    $(".addToCart").off('submit.addToCart').on('submit.addToCart', function (e) {
+        e.preventDefault();
+
+        var pid = $(this).find('input[name="pid"]').val();
+        var count = $(this).find('input[name="amount"]').val();
+        var action = $(this).attr('action');
+
+        window.app.post({
+            url: action,
+            data: {'pid': pid, 'count': count},
+        });
+        return false;
+    });
     $(":input").attr('autocomplete', "off");
 };
 
@@ -17,26 +26,8 @@ Application.prototype.post = function (settings, method) {
         headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         },
-        xhr: function () {
-            var xhr = $.ajaxSettings.xhr();
-            if (xhr.upload) {
-                xhr.upload.addEventListener('progress', function (progress) {
-                    if (typeof settings.upload_progress !== 'undefined' &&
-                        settings.upload_progress === false) {
-                        return;
-                    }
-                    NProgress.set(progress.loaded / (progress.total || 100));
-                }, false);
-            }
-            return xhr;
-        },
         success: function (response, textStatus, jqXHR) {
-            if (typeof settings.upload_progress === 'undefined' || (
-                    typeof settings.upload_progress !== 'undefined' &&
-                    settings.upload_progress !== false)) {
-                // Progressbar leállítása
-                NProgress.done();
-            }
+
             if (response.fn) {
                 eval(response.fn);
             }
@@ -49,7 +40,6 @@ Application.prototype.post = function (settings, method) {
         },
         error: function (jqXHR, textStatus, errorThrown) {
             var response = $.parseJSON(jqXHR.responseText);
-            console.log(jqXHR, textStatus, errorThrown);
             if (response.status === "401") {
                 window.location.reload(true);
                 return;
@@ -64,9 +54,20 @@ Application.prototype.post = function (settings, method) {
     if (typeof options.data === 'undefined') {
         options.data = {};
     }
-    NProgress.start();
 
     return $.ajax(options);
+};
+
+Application.prototype.flashMessage = function (level, message, title) {
+    if (level === 'success') {
+        toastr.success(message, title);
+    }
+    if (level === 'warning') {
+        toastr.warning(message, title);
+    }
+    if (level === 'error') {
+        toastr.error(message, title);
+    }
 };
 
 window.app = new Application();
