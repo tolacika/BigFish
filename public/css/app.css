@@ -10005,29 +10005,54 @@ a.text-dark:focus {
 }
 
 .productListItem img {
-  max-height: 180px;
-  max-width: 127px;
+  max-height: 200px;
+  max-width: 140px;
   margin-right: 1rem;
 }
 
-.productListItem .itemPrice {
+.cartAction .input-group {
+  max-width: 100px;
+}
+
+.itemPrice {
   font-size: 1.4rem;
 }
 
-.productListItem .itemPrice span {
+.itemPrice span {
   font-weight: bold;
 }
 
-.productListItem .oldPrice {
+.oldPrice {
   text-decoration: line-through;
   margin-bottom: 0;
 }
 
-.productListItem .oldPrice span {
+.oldPrice span {
   font-weight: bold;
 }
 
-.productListItem .input-group {
-  max-width: 100px;
+.cartTable .imageHolder {
+  width: 104px !important;
+}
+
+.cartTable .imageHolder img {
+  max-width: 80px;
+}
+
+.cartTable th,
+.cartTable td {
+  vertical-align: middle;
+}
+
+.cartTable th {
+  text-align: center;
+}
+
+.cartTable .itemPrice {
+  font-size: 1rem;
+}
+
+.cartTable .finalPrice {
+  font-size: 1.4rem;
 }
 

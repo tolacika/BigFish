@@ -16,3 +16,6 @@ Route::get('/products', 'ProductController@list')->name('productList');
 Route::get('/product/{slug}', 'ProductController@details')->name('productDetails');
 Route::get('/cart', 'CartController@cart')->name('cart');
 Route::post('/addToCart', 'CartController@addToCart')->name('addToCart');
+Route::post('/updateCart', 'CartController@updateCart')->name('updateCart');
+Route::post('/deleteCartItem', 'CartController@deleteCart')->name('deleteCartItem');
+

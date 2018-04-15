@@ -71,10 +71,11 @@ class Product extends Model {
         if ($disc) {
             return $disc->getText();
         }
+
         return "";
     }
 
-    private function formatPrice($price, $format = false) {
+    public function formatPrice($price, $format = false) {
         if ($format) {
             return number_format($price, 0, '', ' ');
         }

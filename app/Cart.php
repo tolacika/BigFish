@@ -9,10 +9,14 @@
 namespace App;
 
 
+use App\Models\Discount;
+
 class Cart {
 
     /** @var CartItem[] */
     private $items = [];
+
+    /** @var Cart */
     private static $_instance = null;
 
     private function __construct() {
@@ -31,7 +35,12 @@ class Cart {
         if (self::$_instance == null) {
             self::$_instance = new Cart();
         }
+
         return self::$_instance;
+    }
+
+    public function getItems() {
+        return $this->items;
     }
 
     public function getCount() {
@@ -39,35 +48,89 @@ class Cart {
         foreach ($this->items as $k => $item) {
             $count += $item->count;
         }
+
         return $count;
     }
 
+    public function getFullPrice() {
+        return $this->getPartPrice() - $this->get2plus1Discount();
+    }
+
+    public function getPartPrice() {
+        $price = 0;
+        foreach ($this->items as $item) {
+            $price += $item->product->getDiscountPrice() * $item->count;
+        }
+
+        return $price;
+    }
+
+    public function get2plus1Discount() {
+        $disc = Discount::active()->where('discount_type', '2+1')->first();
+        if ($disc->target_type == "single") {
+            // Todo: Nincs benne a feladatban, de meg lehetne csinálni
+            return 0;
+        } elseif ($disc->target_type == "publisher") {
+            $pub = $disc->target_reference;
+            $prices = [];
+            foreach ($this->items as $item) {
+                if ($item->product->publisher == $pub) {
+                    for ($i = 0; $i < $item->count; $i++) {
+                        $prices[] = $item->product->getDiscountPrice();
+                    }
+                }
+            }
+            asort($prices);
+            $prices = array_values($prices);
+            $itemCount = count($prices);
+            $needToFreeCount = intval(floor($itemCount / 3));
+            $discount = 0;
+            for ($i = 0; $i < $needToFreeCount && $i < $itemCount; $i++) {
+                $discount += $prices[$i];
+            }
+
+            return $discount;
+        }
+
+        return 0;
+    }
+
+    public function hasValid2plus1Discount() {
+        return $this->get2plus1Discount() > 0;
+    }
+
     public function addToCart($pid, $count) {
-        $found = false;
+        $found = null;
         foreach ($this->items as $k => $item) {
             if ($item->productId == $pid) {
-                $found = true;
+                $found = $this->items[$k];
                 $this->items[$k]->count += $count;
+                break;
             }
         }
-        if (!$found) {
-            $this->items[] = new CartItem($pid, $count);
+        if ($found === null) {
+            $this->items[] = $found = new CartItem($pid, $count);
         }
         $this->save();
+
+        return $found;
     }
 
     public function updateCartItem($pid, $count) {
-        $found = false;
+        $found = null;
         foreach ($this->items as $k => $item) {
             if ($item->productId == $pid) {
-                $found = true;
+                $found = $this->items[$k];
                 $this->items[$k]->count = $count;
+                break;
             }
         }
-        if (!$found) {
-            $this->items[] = new CartItem($pid, $count);
+        if ($found === null) {
+            $this->items[] = $found = new CartItem($pid, $count);
         }
         $this->save();
+
+        return $found;
     }
 
     public function removeFromCart($pid) {

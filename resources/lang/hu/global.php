@@ -7,9 +7,9 @@
  */
 
 return [
-    'nameAsc' => 'Cím szerint növekvő',
-    'nameDesc' => 'Cím szerint csökkenő',
-    'priceAsc' => 'Ár szerint növekvő',
+    'nameAsc'   => 'Cím szerint növekvő',
+    'nameDesc'  => 'Cím szerint csökkenő',
+    'priceAsc'  => 'Ár szerint növekvő',
     'priceDesc' => 'Ár szerint csökkenő',
 
 ];

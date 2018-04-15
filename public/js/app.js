@@ -34056,16 +34056,17 @@ Object.defineProperty(exports, '__esModule', { value: true });
 Application = function Application() {};
 
 Application.prototype.initApp = function () {
-    $(".addToCart").off('submit.addToCart').on('submit.addToCart', function (e) {
+    $(".cartAction").off('submit.addToCart').on('submit.addToCart', function (e) {
         e.preventDefault();
 
         var pid = $(this).find('input[name="pid"]').val();
         var count = $(this).find('input[name="amount"]').val();
+        var rowId = $(this).find('input[name="row_id"]').val();
         var action = $(this).attr('action');
 
         window.app.post({
             url: action,
-            data: { 'pid': pid, 'count': count }
+            data: { 'pid': pid, 'count': count || 0, 'rowId': rowId || 0 }
         });
         return false;
     });

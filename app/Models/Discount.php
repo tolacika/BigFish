@@ -73,6 +73,7 @@ class Discount extends Model {
             case "2+1":
                 return "2+1 Akció";
         }
+
         return "";
     }
 }

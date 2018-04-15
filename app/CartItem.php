@@ -7,6 +7,7 @@
  */
 
 namespace App;
+
 use App\Models\Product;
 
 /**

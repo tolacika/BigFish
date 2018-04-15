@@ -46,7 +46,7 @@
                     @if ($prod->hasOtherDiscount())
                         <span class="badge badge-danger">{{ $prod->getOtherDiscount() }}</span>
                     @endif
-                    <form class="addToCart" action="{{ route('addToCart') }}">
+                    <form class="cartAction" action="{{ route('addToCart') }}">
                         <input type="hidden" name="pid" value="{{ $prod->id }}">
                         <div class="input-group float-right mb-1 mr-1">
                             <input type="number" class="form-control" name="amount" min="1" value="1" placeholder="" aria-label="" aria-describedby="basic-addon1">

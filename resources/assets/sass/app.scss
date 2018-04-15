@@ -15,25 +15,48 @@
 
 .productListItem {
   img {
-    max-height: 180px;
-    max-width: 127px;
+    max-height: 200px;
+    max-width: 140px;
     margin-right: 1rem;
   }
   padding: 15px;
+}
+
+.cartAction .input-group {
+  max-width: 100px;
+}
+
+.itemPrice {
+  span {
+    font-weight: bold;
+  }
+  font-size: 1.4rem;
+}
+.oldPrice {
+  span {
+    font-weight: bold;
+  }
+  text-decoration: line-through;
+  margin-bottom: 0;
+}
+
+.cartTable {
+  .imageHolder {
+    img {
+      max-width: 80px;
+    }
+    width: 104px !important;
+  }
+  th, td {
+    vertical-align: middle;
+  }
+  th {
+    text-align: center;
+  }
   .itemPrice {
-    span {
-      font-weight: bold;
-    }
+    font-size: 1rem;
+  }
+  .finalPrice {
     font-size: 1.4rem;
-  }
-  .oldPrice {
-    span {
-      font-weight: bold;
-    }
-    text-decoration: line-through;
-    margin-bottom: 0;
-  }
-  .input-group {
-    max-width: 100px;
   }
 }

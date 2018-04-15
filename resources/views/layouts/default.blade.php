@@ -30,7 +30,8 @@
                 <li class="nav-item">
                     <a class="nav-link" href="{{ route('cart') }}">
                         Kosár
-                        <span class="badge badge-pill badge-light" id="cartCounter">{{ \App\Cart::getInstance()->getCount() }}</span>
+                        <span class="badge badge-pill badge-light" id="cartCounter">{{ \App\Cart::getInstance()->getCount() }}
+                            termék - {{ number_format(\App\Cart::getInstance()->getFullPrice(), 0, '', ' ') }} Ft</span>
                     </a>
                 </li>
 
